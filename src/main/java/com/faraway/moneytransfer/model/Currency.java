@@ -1,10 +1,18 @@
 package com.faraway.moneytransfer.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 /**
  * User: mterentyev
  * Date: 13.08.2018
  */
+@Entity
+@Table(name = "currency")
 public class Currency extends NamedEntity {
+
+    @Column(name = "iso_currency_code", nullable = false)
     private String isoCurrencyCode;
 
     public String getIsoCurrencyCode() {
