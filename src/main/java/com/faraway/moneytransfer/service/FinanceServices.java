@@ -9,4 +9,6 @@ import com.faraway.moneytransfer.model.Money;
  */
 public interface FinanceServices {
     boolean transferMoney(Account accFrom, Account accTo, Money money);
+
+    Account getAccountById(int id);
 }

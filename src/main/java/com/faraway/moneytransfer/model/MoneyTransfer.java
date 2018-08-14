@@ -11,13 +11,15 @@ import java.util.Date;
 
 @NamedQueries({
         @NamedQuery(name = MoneyTransfer.GET_BETWEEN, query = "SELECT m FROM MoneyTransfer m "+
-                "WHERE (m.sender.id=:userId or m.reciever.id=:recieverID) AND m.operationDate BETWEEN :startDate AND :endDate ORDER BY m.operationDate DESC"),
+                "WHERE (m.sender.id=:senderId or m.recipient.id=:recipientID) AND m.operationDate BETWEEN :startDate AND :endDate ORDER BY m.operationDate DESC"),
         @NamedQuery(name = MoneyTransfer.ALL_BY_ACCOUNT_SORTED, query = "SELECT DISTINCT(m) FROM MoneyTransfer m " +
-                "WHERE m.sender.id=:userId or m.reciever.id=:recieverID ORDER BY m.operationDate"),
+                "WHERE m.sender.id=:senderId or m.recipient.id=:recipientID ORDER BY m.operationDate"),
 })
 @Entity
 @Table(name = "money_transfer")
 public class MoneyTransfer extends BaseEntity {
+
+    public MoneyTransfer() {}
 
     public MoneyTransfer(Account sender, Account recipient, BigDecimal sourceCurrencyUnits, BigDecimal targetCurrencyUnits) {
         this.sender = sender;

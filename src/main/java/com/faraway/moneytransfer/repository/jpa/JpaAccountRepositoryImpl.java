@@ -41,4 +41,5 @@ public class JpaAccountRepositoryImpl implements AccountRepository {
     public List<Account> getAll() {
         return em.createNamedQuery(Account.ALL_SORTED, Account.class).getResultList();
     }
+
 }

@@ -2,6 +2,7 @@ package com.faraway.moneytransfer.repository;
 
 import com.faraway.moneytransfer.model.MoneyTransfer;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
@@ -21,4 +22,5 @@ public interface MoneyTransferRepository {
     // ORDERED dateTime
     Collection<MoneyTransfer> getBetween(LocalDateTime startDate, LocalDateTime endDate, int accountId);
 
+    void setEntityManager(EntityManager em);
 }

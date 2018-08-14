@@ -5,6 +5,8 @@ import com.faraway.moneytransfer.model.Money;
 import com.faraway.moneytransfer.model.MoneyTransfer;
 import com.faraway.moneytransfer.repository.AccountRepository;
 import com.faraway.moneytransfer.repository.MoneyTransferRepository;
+import com.faraway.moneytransfer.repository.jpa.JpaAccountRepositoryImpl;
+import com.faraway.moneytransfer.repository.jpa.JpaMoneyTransferRepositoryImpl;
 import com.faraway.moneytransfer.service.FinanceServices;
 import com.faraway.moneytransfer.util.HibernateUtil;
 
@@ -34,6 +36,7 @@ public class FinanceServicesImpl implements FinanceServices {
         recipient.setAmount(recipient.getAmount().add(moneyTransfer.getTargetCurrencyUnits()));
 
         EntityManager em = HibernateUtil.getEm();
+        assureRepositoryInitialized(em);
         em.getTransaction().begin();
         moneyTransferRepository.save(moneyTransfer);
         accountRepository.save(sender);
@@ -41,4 +44,23 @@ public class FinanceServicesImpl implements FinanceServices {
         em.getTransaction().commit();
         return true;
     }
+
+    @Override
+    public Account getAccountById(int id) {
+        EntityManager em = HibernateUtil.getEm();
+        assureRepositoryInitialized(em);
+        return accountRepository.get(id);
+    }
+
+    private void assureRepositoryInitialized(EntityManager em) {
+        if (accountRepository == null) {
+            accountRepository = new JpaAccountRepositoryImpl();
+        }
+        if (moneyTransferRepository == null) {
+            moneyTransferRepository = new JpaMoneyTransferRepositoryImpl();
+        }
+        accountRepository.setEntityManager(em);
+        moneyTransferRepository.setEntityManager(em);
+    }
+
 }

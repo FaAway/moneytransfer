@@ -2,6 +2,7 @@ package com.faraway.moneytransfer.repository;
 
 import com.faraway.moneytransfer.model.Account;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 /**
@@ -18,4 +19,6 @@ public interface AccountRepository {
     Account get(int id);
 
     List<Account> getAll();
+
+    void setEntityManager(EntityManager em);
 }
