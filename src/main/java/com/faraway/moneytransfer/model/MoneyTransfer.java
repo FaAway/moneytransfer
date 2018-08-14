@@ -37,7 +37,7 @@ public class MoneyTransfer extends BaseEntity {
     @JoinColumn(name = "recipient_id", nullable = false)
     private Account recipient;
 
-    @Column(name = "registered", columnDefinition = "timestamp default now()")
+    @Column(name = "operation_date", columnDefinition = "timestamp default now()")
     private Date operationDate;
 
     @Column(name = "source_currency_units", nullable = false)
