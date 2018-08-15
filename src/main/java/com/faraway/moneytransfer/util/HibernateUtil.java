@@ -12,6 +12,8 @@ public class HibernateUtil {
 
     static {
         try {
+            // load jdbc driver
+            Class.forName("org.hsqldb.jdbcDriver");
             emf = Persistence.createEntityManagerFactory(PERSISTENT_UNIT_NAME);
         } catch (Throwable ex) {
             throw new ExceptionInInitializerError(ex);

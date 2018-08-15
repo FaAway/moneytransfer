@@ -7,18 +7,16 @@ import com.faraway.moneytransfer.repository.AccountRepository;
 import com.faraway.moneytransfer.repository.MoneyTransferRepository;
 import com.faraway.moneytransfer.repository.jpa.JpaAccountRepositoryImpl;
 import com.faraway.moneytransfer.repository.jpa.JpaMoneyTransferRepositoryImpl;
-import com.faraway.moneytransfer.service.FinanceServices;
+import com.faraway.moneytransfer.service.FinanceService;
 import com.faraway.moneytransfer.util.HibernateUtil;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 /**
  * User: mterentyev
  * Date: 13.08.2018
  */
-public class FinanceServicesImpl implements FinanceServices {
+public class FinanceServiceImpl implements FinanceService {
 
     private MoneyTransferRepository moneyTransferRepository;
     private AccountRepository accountRepository;
@@ -26,16 +24,18 @@ public class FinanceServicesImpl implements FinanceServices {
     @Override
     public boolean transferMoney(Account sender, Account recipient, Money money) {
 
+        EntityManager em = HibernateUtil.getEm();
+        sender = em.find(Account.class, sender.getId());
+        recipient = em.find(Account.class, recipient.getId());
+
         // TODO: currency converter
         if (!sender.getCurrency().equals(recipient.getCurrency()) || !sender.getCurrency().equals(money.getCurrency())) {
             throw new UnsupportedOperationException("Currency converter is not supported yet");
         }
-        // TODO: currency converter
         MoneyTransfer moneyTransfer = new MoneyTransfer(sender, recipient, money.getAmount(), money.getAmount());
         sender.setAmount(sender.getAmount().subtract(moneyTransfer.getSourceCurrencyUnits()));
         recipient.setAmount(recipient.getAmount().add(moneyTransfer.getTargetCurrencyUnits()));
 
-        EntityManager em = HibernateUtil.getEm();
         assureRepositoryInitialized(em);
         em.getTransaction().begin();
         moneyTransferRepository.save(moneyTransfer);
